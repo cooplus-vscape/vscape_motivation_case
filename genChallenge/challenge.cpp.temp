@@ -1,0 +1,229 @@
+
+#include<iostream>
+#include<cstdlib>
+#include<unistd.h>
+#include<cstring>
+#include<time.h>
+#include<cstdlib>
+
+
+
+using namespace std;
+
+int certificate=0;
+
+
+class shape0{
+    public:
+        virtual void render(void);
+        unsigned long long param_0;
+};
+
+void shape0::render(void){
+    // ...
+    cout<<"hello!\n";
+    ;
+}
+
+struct banner{
+    // public:
+    char header[{{banner_header_size}}];
+    unsigned long long length;
+    char* buffer;
+};
+
+shape0* gtable[100];
+unsigned int gitem_cout=0;
+
+{{subclasses_declare}}
+
+
+
+void printallocatemenu(){
+    printf("shape range is 1-{{nodenum}}\n");
+    printf("your choice:");
+}
+void allocate(){
+    cout<<"this is allocate\n";
+    printallocatemenu();
+    int opt;
+    scanf("%d",&opt);
+    fflush(stdin);
+    switch (opt)
+    {
+
+    {% for item in range(1,nodenum+1) %}
+      case {{item}}:
+        gtable[gitem_cout] = new shape{{item}};
+        break;
+    {% endfor %}
+
+    default:
+        printf("alloc not well!\n");
+        break;
+    }
+    gitem_cout+=1;
+}
+
+void del(){
+    cout<<"\ndelete shape\n";
+    printf("delete num:\n");
+    int idx;
+    fflush(stdin);
+    scanf("%d",&idx);
+    if(idx>=0 && idx<100){
+        if (gtable[idx])
+        {
+            delete gtable[idx];
+            gtable[idx] = nullptr;
+            printf("[*] del done\n\n");
+        }
+    }
+}
+
+void check_pwn(){
+    if (certificate==0){
+        printf("Nothing Special\nRC\n");
+    }
+    else{
+        printf("OOOps!\nRC\n");
+    }
+}
+
+void readlen(char *ptr, unsigned long long len){
+    unsigned long long idx=0;
+    for(;idx<len;){
+        read(0,ptr+idx,1);
+        if(*(ptr+idx)=='\n') {
+            *(ptr+idx)='\x00';
+            break;
+        }
+        idx+=1;
+    }
+    if (idx==len){
+        *(ptr+idx)='\x00';
+    }
+    ;
+};
+void paint(){
+    int idx=0;
+    for(idx;idx<gitem_cout;idx++){
+        if (gtable[idx]){
+            gtable[idx]->render();
+        }
+    }
+}
+
+void trigger_bug(){
+    char* buf = new char[{{vul_obj_size}}];//可调节点
+    printf("Your Input:");
+    scanf("%{{vul_read_in_size}}s",buf);
+};
+
+// void trigger_bug(){
+//     char* buf = new char[{{bufsize}}];
+//     scanf("%{{readin_size}}s",buf);
+// };
+
+
+struct banner *bn =nullptr;
+void new_banner(){
+    unsigned long long len;
+    printf("set banner length:\n");
+    scanf("%lld",&len);
+    fflush(stdin);
+    
+    struct banner *ptr =(struct banner *) new char[sizeof(banner)+len+1];
+    
+    ptr->length = len;
+    ptr->buffer = (char*)ptr+sizeof(banner);
+
+    memset((char*)ptr+sizeof(banner),0,len);
+    printf("input banner:\n");
+    
+    readlen((char*)ptr+sizeof(banner),len);
+    printf("input done\n");
+    printf("%s",(char*)ptr+sizeof(banner));
+    bn = ptr;
+    printf("%lld\n",ptr->length);
+    printf("%lld\n",bn->length);
+    // scanf("%s")
+}
+void change_banner(){
+    fflush(stdin);
+    // printf("banner length is %lld\n",bn->length);
+    printf("banner length is %lld\nYour new banner:",bn->length);
+
+        // readlen((char*)bn+sizeof(banner),bn->length);
+        readlen(bn->buffer,bn->length);
+
+    // else{
+    //     exit(-1);
+    // }
+}
+
+
+void printmenu(){
+    printf("\n\n\n");
+    printf("1:allocate\n");
+    printf("2:delete\n");
+    printf("3:render\n");
+    printf("4:new_banner\n");
+    printf("5:change_banner\n");
+    printf("6:trigger_bug\n");
+    printf("7:check_pwn\n");
+}
+
+
+
+int main(){
+    // srand(time(NULL));
+
+
+    setbuf(stdin,0);
+	setbuf(stdout,0);
+    shape0* ptr;
+    // char *buf = new char[100];
+    ptr = new shape0;
+    ptr->render();
+    int option;
+    while(1){
+        printmenu();
+        printf("Items:\n");
+        fflush(stdout);
+        fflush(stdin);
+        
+        scanf("%d",&option);
+        fflush(stdin);
+
+        // printf("option:%d\n",option);
+        switch (option)
+        {
+        case 1:
+            /* code */
+            allocate();
+            break;
+        case 2:
+            del();
+            break;
+        case 4:
+            new_banner();
+            break;
+        case 5:
+            if (bn)change_banner();
+            break;
+        case 3:
+            paint();
+            break;
+        case 6:
+            trigger_bug();
+            break;
+        case 7:
+            check_pwn();
+            break;
+        default:
+            exit(-1);
+        }
+        ;
+    }
+}

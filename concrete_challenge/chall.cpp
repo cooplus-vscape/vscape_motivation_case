@@ -1,0 +1,1 @@
+../genChallenge/challenge.cpp
