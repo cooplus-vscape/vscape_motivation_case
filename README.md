@@ -13,7 +13,11 @@ python3 generate_challenge.py
 Then you will get `challenge.cpp` in your project directory. Compile the `challenge.cpp` like this:
 
 ```shell
-clang++ challenge.cpp -Xclang -fdump-verbose -Xclang -fdump-eachlayout -fsanitize=cfi -fvisibility=hidden -flto  -o challenge -L`jemalloc-config --libdir` -Wl,-rpath,`jemalloc-config --libdir` -ljemalloc `jemalloc-config --libs`
+clang++ challenge.cpp \
+-Xclang -fdump-verbose -Xclang -fdump-eachlayout \
+-fsanitize=cfi -fvisibility=hidden -flto  \
+-o challenge \
+-L`jemalloc-config --libdir` -Wl,-rpath,`jemalloc-config --libdir` -ljemalloc `jemalloc-config --libs`
 # compile the challenge with jemalloc and llvm-cfi enabled
 # meanwhile we will collect struct information with -fdump-* plugins
 ```
